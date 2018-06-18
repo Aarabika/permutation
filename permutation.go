@@ -116,7 +116,7 @@ func (p Permutator) Index() int {
 //for ordered in Golang, visit http://golang.org/ref/spec#Comparison_operators
 //After generating a Permutator, the argument k can be modified and deleted,Permutator store a copy of k internel.Rght now, a Permutator can  be used concurrently
 
-func NewPerm(k interface{}, less Less) (*Permutator, error) {
+func NewPerm(k interface{}, less Less, len int) (*Permutator, error) {
 	v := reflect.ValueOf(k)
 	//check to see if i is a slice
 	if v.Kind() != reflect.Slice {
@@ -158,7 +158,7 @@ func NewPerm(k interface{}, less Less) (*Permutator, error) {
 	if i != length-1 {
 		sort.Sort(sortable{v, less})
 	}
-	s := &Permutator{value: v, less: less, length: length, index: 1, amount: factorial(length)}
+	s := &Permutator{value: v, less: less, length: length, index: 1, amount: len}
 	s.idle = make(chan bool, 1)
 	s.idle <- true
 	return s, nil
@@ -240,7 +240,7 @@ func reverse(v reflect.Value, i, j int) {
 	}
 }
 //caculate n!,because this function can only be invoked by NewPerm,so we do not need the check if i>=0
-func factorial(i int) int {
+func Factorial(i int) int {
 	result := 1
 	for i > 0 {
 		result *= i
